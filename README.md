@@ -43,7 +43,7 @@ Designed to handle high throughput, multi-user logging, and time-series decay ca
                                     |
                                     v REST / gRPC
                   +-----------------+-----------------+
-                  |          API Gateway            |
+                  |          API Gateway              |
                   |     (Rate Limiting & Auth)        |
                   +-----------------+-----------------+
                                     |
@@ -61,7 +61,7 @@ Designed to handle high throughput, multi-user logging, and time-series decay ca
              | (Active Blood  |          | TimescaleDB    |
              |  Caffeine)     |          | (User Logs)    |
              +----------------+          +----------------+
-
+```
 ### Key Engineering Decisions:
 1. **Time-Series Storage:** Coffee intake, sleep hours, and self-reported fatigue scores are time-series events indexed for range queries and trend analysis.
 2. **In-Memory Active Decay Cache:** Active caffeine levels for live user dashboards are calculated and cached in Redis with TTLs to prevent database recalculations on every request.
@@ -104,8 +104,8 @@ When $\text{FDI}$ exceeds safety thresholds, the engine triggers an automated ta
   "work_intensity": "high_stakes",
   "ui_mode": "easy"
 }
-
-### Daily Sleep and Check-In Schema (`json`)
+```
+### Daily Sleep and Check-In Schema (`json`) / also this will change later
 ```json
 {
   "id": "chk_9921ab",
@@ -115,7 +115,7 @@ When $\text{FDI}$ exceeds safety thresholds, the engine triggers an automated ta
   "fatigue_score": 4,
   "caffeine_budget_modifier": 0.75
 }
-
+```
 ## API Endpoints Reference
 
 | Method | Endpoint | Description |
