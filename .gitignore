@@ -1,0 +1,5 @@
+dep.md
+node_modules/
+.env
+dist/
+*.log
