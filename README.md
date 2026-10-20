@@ -43,7 +43,7 @@ Designed to handle high throughput, multi-user logging, and time-series decay ca
                                     |
                                     v REST / gRPC
                   +-----------------+-----------------+
-                  |          API Gateway            |
+                  |          API Gateway              |
                   |     (Rate Limiting & Auth)        |
                   +-----------------+-----------------+
                                     |
