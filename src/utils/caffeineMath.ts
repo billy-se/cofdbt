@@ -1,5 +1,5 @@
 export const calculateInitialCaffeine = (tbspFraction: number, waterRatioPercent: number = 100): number => {
-  const BASE_MG_PER_TBSPOON = 75.0;
+  const BASE_MG_PER_TBSPOON = 120.0; //anticipating baseline mg
   
   let concentrationMultiplier = 1.0;
   if (waterRatioPercent < 50) {

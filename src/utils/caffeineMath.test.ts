@@ -4,7 +4,7 @@ import {
   calculateInitialCaffeine, 
   calculateCaffeineDecay, 
   calculateFatigueDebtIndex 
-} from './caffeineMath';
+} from './caffeineMath.js';
 
 test('calculateInitialCaffeine handles standard and concentrated brews', () => {
   const standard = calculateInitialCaffeine(1.0, 100);

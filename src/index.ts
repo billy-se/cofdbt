@@ -1,14 +1,23 @@
-import express, {Request, Response} from 'express';
+import express, {type Request, type Response} from 'express';
 import dotenv from 'dotenv';
-import { connectDB, query } from './db';
-import { calculateInitialCaffeine, calculateCaffeineDecay, calculateFatigueDebtIndex, generateTaperingPlan } from './utils/caffeineMath';
+import { connectDB, query } from './db/index.js';
+import { calculateInitialCaffeine, calculateCaffeineDecay, calculateFatigueDebtIndex, generateTaperingPlan } from './utils/caffeineMath.js';
+import cors from 'cors';
+import authRouter from './routes/auth.js';
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT;
 
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true
+}));
+
 app.use(express.json());
+
+app.use('/api/auth', authRouter);
 
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'healthy', service: 'cofdbt-backend' });

@@ -61,7 +61,7 @@ Designed to handle high throughput, multi-user logging, and time-series decay ca
              | (Active Blood  |          | TimescaleDB    |
              |  Caffeine)     |          | (User Logs)    |
              +----------------+          +----------------+
-
+```
 ### Key Engineering Decisions:
 1. **Time-Series Storage:** Coffee intake, sleep hours, and self-reported fatigue scores are time-series events indexed for range queries and trend analysis.
 2. **In-Memory Active Decay Cache:** Active caffeine levels for live user dashboards are calculated and cached in Redis with TTLs to prevent database recalculations on every request.
@@ -104,7 +104,7 @@ When $\text{FDI}$ exceeds safety thresholds, the engine triggers an automated ta
   "work_intensity": "high_stakes",
   "ui_mode": "easy"
 }
-
+```
 ### Daily Sleep and Check-In Schema (`json`)
 ```json
 {
@@ -115,7 +115,7 @@ When $\text{FDI}$ exceeds safety thresholds, the engine triggers an automated ta
   "fatigue_score": 4,
   "caffeine_budget_modifier": 0.75
 }
-
+```
 ## API Endpoints Reference
 
 | Method | Endpoint | Description |
@@ -144,6 +144,9 @@ When $\text{FDI}$ exceeds safety thresholds, the engine triggers an automated ta
 - [ ] Add coffee bag weight tracking and depletion estimation.
 
 ### Phase 4: Frontend UI
-- [ ] Build Easy UI mode with tablespoon sliders and water concentration controls.
+- [x] Build Easy UI mode with tablespoon sliders and water concentration controls.
 - [ ] Build Hard UI mode for precise gram and milliliter inputs.
-- [ ] Implement interactive decay charts and risk calendar heatmaps.
+- [x] Implement interactive decay charts
+- [ ] Implement historical progress calendar & risk heatmaps.
+- [x] Implement Google OAuth login
+- [x] Build interactive Intake and Daily Check-In modals.
