@@ -29,8 +29,10 @@ export const calculateFatigueDebtIndex = (
   weeklyCheckins: { sleep_hours: number; fatigue_score: number; check_in_date: string }[]
 ): { fdiScore: number; riskTier: 'LOW' | 'MODERATE' | 'HIGH' | 'CRITICAL' } => {
   const BASELINE_SLEEP_HOURS = 7.5;
+  const daysCount = Math.max(weeklyCheckins.length, 1);
   
   const totalCaffeineMg = weeklyLogs.reduce((sum, log) => sum + Number(log.estimated_caffeine_mg), 0);
+  const avgDailyCaffeine = totalCaffeineMg / daysCount;
 
   const avgFatigue = weeklyCheckins.length > 0
     ? weeklyCheckins.reduce((sum, chk) => sum + Number(chk.fatigue_score), 0) / weeklyCheckins.length
@@ -40,16 +42,19 @@ export const calculateFatigueDebtIndex = (
     const deficit = BASELINE_SLEEP_HOURS - Number(chk.sleep_hours);
     return sum + (deficit > 0 ? deficit : 0);
   }, 0);
+  const avgDailySleepDeficit = totalSleepDeficit / daysCount;
 
-  const rawFdi = (totalCaffeineMg * 0.05) * (avgFatigue * 1.5) + (totalSleepDeficit * 10);
+  const fatigueMultiplier = 0.5 + (avgFatigue / 5.0) * 1.5;
+  const rawFdi = (avgDailyCaffeine * 0.08) * fatigueMultiplier + (avgDailySleepDeficit * 12);
+  
   const fdiScore = Math.round(rawFdi * 100) / 100;
 
   let riskTier: 'LOW' | 'MODERATE' | 'HIGH' | 'CRITICAL' = 'LOW';
-  if (fdiScore > 150) {
+  if (fdiScore > 85) {
     riskTier = 'CRITICAL';
-  } else if (fdiScore > 100) {
+  } else if (fdiScore > 60) {
     riskTier = 'HIGH';
-  } else if (fdiScore > 50) {
+  } else if (fdiScore > 35) {
     riskTier = 'MODERATE';
   } else {
     riskTier = 'LOW';

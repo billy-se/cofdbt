@@ -109,7 +109,7 @@ export default function App() {
                 v1.0
               </span>
             </h1>
-            <p className="text-xs text-zinc-500 font-medium tracking-wide">Coffee, Do, Sleep — Track your telemetry.</p>
+            <p className="text-xs text-zinc-500 font-medium tracking-wide">Coffee, Do, Sleep</p>
             <div className="flex justify-center pt-4">
               <GoogleLogin
                 onSuccess={handleGoogleSuccess}

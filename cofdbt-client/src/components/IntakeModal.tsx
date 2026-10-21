@@ -11,7 +11,7 @@ interface IntakeModalProps {
 export function IntakeModal({ isOpen, onClose, onLogSuccess, userId }: IntakeModalProps) {
   const [tbspFraction, setTbspFraction] = useState<number>(1.0);
   const [waterRatio, setWaterRatio] = useState<number>(100);
-  const [workIntensity, setWorkIntensity] = useState<string>('medium');
+  const [workIntensity, setWorkIntensity] = useState<string>('medium_load');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   if (!isOpen) return null;
@@ -106,8 +106,8 @@ export function IntakeModal({ isOpen, onClose, onLogSuccess, userId }: IntakeMod
             onChange={(e) => setWorkIntensity(e.target.value)}
             className="w-full bg-zinc-50 border border-zinc-300 text-black font-medium rounded-lg p-2.5 text-xs focus:outline-none focus:border-orange-500 transition"
           >
-            <option value="low">Low Load (Administrative / Light)</option>
-            <option value="medium">Medium Load (Standard Coding)</option>
+            <option value="low_load">Low Load (Administrative / Light)</option>
+            <option value="medium_load">Medium Load (Standard Coding)</option>
             <option value="high_stakes">High Stakes (Crunch / Debugging)</option>
           </select>
         </div>
