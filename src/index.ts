@@ -12,9 +12,10 @@ const PORT = Number(process.env.PORT) || 4000;
 
 app.use(cors({
   origin: [
-    process.env.CLIENT_URL || '',
     'https://cofdbt.netlify.app',
-  ],
+    'https://merry-unicorn-dcd171.netlify.app',
+    'http://localhost:5173'
+  ].filter(Boolean),
   credentials: true
 }));
 
