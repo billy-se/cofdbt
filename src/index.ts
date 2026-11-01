@@ -10,12 +10,15 @@ dotenv.config();
 const app = express();
 const PORT = Number(process.env.PORT) || 4000;
 
+const allowedOrigins: string[] = [
+  process.env.CLIENT_URL,
+  'https://cofdbt.netlify.app',
+  'https://merry-unicorn-dcd171.netlify.app',
+  'http://localhost:5173'
+].filter((url): url is string => Boolean(url));
+
 app.use(cors({
-  origin: [
-    'https://cofdbt.netlify.app',
-    'https://merry-unicorn-dcd171.netlify.app',
-    'http://localhost:5173'
-  ].filter(Boolean),
+  origin: allowedOrigins,
   credentials: true
 }));
 
