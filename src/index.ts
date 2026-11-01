@@ -8,7 +8,7 @@ import authRouter from './routes/auth.js';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT;
+const PORT = Number(process.env.PORT);
 
 app.use(cors({
   origin: process.env.CLIENT_URL,
@@ -260,13 +260,11 @@ app.get('/api/tapering/:userId', async (req: Request, res: Response) => {
   }
 });
 
-const startServer = async () => {
-  await connectDB();
-  const PORT = Number(process.env.PORT);
-  
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log(`cofdbt backend running on port ${PORT}`);
-  });
-};
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`cofdbt backend running on port ${PORT}`);
+});
 
-startServer();
+connectDB().catch(err => {
+  console.error("Database connection error:", err)
+});
+
