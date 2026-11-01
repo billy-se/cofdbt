@@ -23,6 +23,10 @@ app.get('/health', (req, res) => {
   res.status(200).json({ status: 'healthy', service: 'cofdbt-backend' });
 });
 
+app.get('/', (req, res) => {
+  res.status(200).json({ status: 'ok', service: 'cofdbt-backend' });
+});
+
 app.post('/api/logs', async (req: Request, res: Response) => {
   try {
     const { user_id, volume_tbsp_fraction, water_ratio_percent, work_intensity, ui_mode } = req.body;
