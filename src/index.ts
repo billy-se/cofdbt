@@ -262,7 +262,9 @@ app.get('/api/tapering/:userId', async (req: Request, res: Response) => {
 
 const startServer = async () => {
   await connectDB();
-  app.listen(PORT, () => {
+  const PORT = Number(process.env.PORT);
+  
+  app.listen(PORT, '0.0.0.0', () => {
     console.log(`cofdbt backend running on port ${PORT}`);
   });
 };
