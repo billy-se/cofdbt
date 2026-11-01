@@ -11,7 +11,10 @@ const app = express();
 const PORT = Number(process.env.PORT) || 4000;
 
 app.use(cors({
-  origin: process.env.CLIENT_URL,
+  origin: [
+    process.env.CLIENT_URL || '',
+    'https://cofdbt.netlify.app',
+  ],
   credentials: true
 }));
 
