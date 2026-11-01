@@ -11,7 +11,7 @@ const app = express();
 const PORT = process.env.PORT;
 
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: process.env.CLIENT_URL,
   credentials: true
 }));
 
@@ -129,8 +129,6 @@ app.post('/api/checkins', async (req: Request, res: Response) => {
       return res.status(400).json({ error: 'fatigue_score must be between 1 and 5.' });
     }
 
-    const targetDate = check_in_date || new Date().toISOString().split('T')[0];
-
     let budgetModifier = 1.0;
     if (sleep_hours < 5.0) {
       budgetModifier = 0.70;
@@ -142,7 +140,7 @@ app.post('/api/checkins', async (req: Request, res: Response) => {
 
     const sql = `
       INSERT INTO daily_checkins (user_id, check_in_date, sleep_hours, fatigue_score, caffeine_budget_modifier)
-      VALUES ($1, $2, $3, $4, $5)
+      VALUES ($1, COALESCE($2::date, CURRENT_DATE), $3, $4, $5)
       ON CONFLICT (user_id, check_in_date)
       DO UPDATE SET 
         sleep_hours = EXCLUDED.sleep_hours,
@@ -151,7 +149,7 @@ app.post('/api/checkins', async (req: Request, res: Response) => {
       RETURNING *;
     `;
 
-    const params = [user_id, targetDate, sleep_hours, fatigue_score, budgetModifier];
+    const params = [user_id, check_in_date || null, sleep_hours, fatigue_score, budgetModifier];
     const result = await query(sql, params);
 
     return res.status(201).json({
@@ -167,7 +165,6 @@ app.post('/api/checkins', async (req: Request, res: Response) => {
     return res.status(500).json({ error: 'Internal server error' });
   }
 });
-
 app.get('/api/fdi/:userId', async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
@@ -186,6 +183,15 @@ app.get('/api/fdi/:userId', async (req: Request, res: Response) => {
     `;
     const checkinsResult = await query(checkinsQuery, [userId]);
 
+    const todayCheckinQuery = `
+      SELECT 1 FROM daily_checkins 
+      WHERE user_id = $1 AND check_in_date = CURRENT_DATE 
+      LIMIT 1;
+    `;
+
+    const todayCheckinResult = await query(todayCheckinQuery, [userId]);
+    const hasCheckedInToday = todayCheckinResult.rows.length > 0;
+
     const { fdiScore, riskTier } = calculateFatigueDebtIndex(logsResult.rows, checkinsResult.rows);
 
     let recommendation = 'Maintain current pacing. Rest and sleep levels are aligned with intake.';
@@ -202,6 +208,7 @@ app.get('/api/fdi/:userId', async (req: Request, res: Response) => {
       window_days: 7,
       fatigue_debt_index: fdiScore,
       risk_tier: riskTier,
+      has_checked_in_today: hasCheckedInToday,
       metrics_summary: {
         total_logs_analyzed: logsResult.rows.length,
         total_checkins_analyzed: checkinsResult.rows.length,

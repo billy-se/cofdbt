@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE = 'http://localhost:4000/api';
+const API_BASE = `${import.meta.env.VITE_API_URL}/api`;
 
 export const getActiveCaffeine = async (userId: string) => {
   const response = await axios.get(`${API_BASE}/caffeine/active/${userId}`);

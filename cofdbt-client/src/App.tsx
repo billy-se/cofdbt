@@ -20,6 +20,7 @@ export default function App() {
   const [fdiData, setFdiData] = useState<any>(null);
   const [taperData, setTaperData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [initialLoading, setInitialLoading] = useState(true);
   
   const [isLogModalOpen, setIsLogModalOpen] = useState(false);
   const [isCheckinModalOpen, setIsCheckinModalOpen] = useState(false);
@@ -29,7 +30,7 @@ export default function App() {
 
   const handleGoogleSuccess = async (credentialResponse: any) => {
     try {
-      const res = await fetch('http://localhost:4000/api/auth/google', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/google`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ credential: credentialResponse.credential }),
@@ -62,8 +63,7 @@ export default function App() {
       setFdiData(fdiRes);
       setTaperData(taperRes);
 
-      const todayStr = new Date().toISOString().split('T')[0];
-      if (fdiRes?.latest_checkin_date === todayStr) {
+      if (fdiRes?.has_checked_in_today === true) {
         setHasCheckedInToday(true);
       }
 
@@ -74,6 +74,7 @@ export default function App() {
       console.error('Failed to load dashboard data:', err);
     } finally {
       setLoading(false);
+      setInitialLoading(false);
     }
   };
 
@@ -119,6 +120,19 @@ export default function App() {
           </div>
         </div>
       </GoogleOAuthProvider>
+    );
+  }
+
+  if (initialLoading) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center font-sans">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-8 h-8 border-3 border-orange-600 border-t-transparent rounded-full animate-spin" />
+          <p className="text-xs font-bold text-zinc-500 uppercase tracking-widest font-mono">
+            Loading...
+          </p>
+        </div>
+      </div>
     );
   }
 

@@ -4,7 +4,7 @@ import { query } from '../db/index.js';
 
 const router = Router();
 
-const GOOGLE_CLIENT_ID = process.env.google_client_id || '';
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';
 const client = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 router.post('/google', async (req: Request, res: Response) => {

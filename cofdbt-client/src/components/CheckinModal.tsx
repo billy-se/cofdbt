@@ -8,7 +8,7 @@ interface CheckinModalProps {
   userId: string; 
 }
 
-const API_BASE = 'http://localhost:4000/api';
+const API_BASE = `${import.meta.env.VITE_API_URL}/api`;
 
 export function CheckinModal({ isOpen, onClose, onCheckinSuccess, userId }: CheckinModalProps) {
   const [sleepHours, setSleepHours] = useState<string>('7.0');
@@ -33,7 +33,7 @@ export function CheckinModal({ isOpen, onClose, onCheckinSuccess, userId }: Chec
       });
 
       setLoading(false);
-      onCheckinSuccess();
+      await onCheckinSuccess();
       onClose();
     } catch (err: any) {
       console.error('Failed to submit check-in:', err);

@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "node --import tsx --test src/utils/**/*.test.ts",
-    "dev": "tsx watch src/index.ts"
+    "dev": "tsx watch src/index.ts",
+    "start": "node dist/index.js",
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
