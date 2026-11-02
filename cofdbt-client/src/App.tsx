@@ -7,6 +7,7 @@ import { ActiveCaffeineCard } from './components/ActiveCaffeineCard.js';
 import { TamperingCard } from './components/TamperingCard.js';
 import { DecayChart } from './components/DecayChart.js';
 import type { ChartPoint } from './components/DecayChart.js';
+import faviconLogo from './assets/favicon.png';
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
 
@@ -143,7 +144,7 @@ export default function App() {
         <div>
           <h1 className="text-xl font-bold tracking-tight text-black flex items-center gap-2">
             <img 
-              src="/favicon.png" 
+              src={faviconLogo}
               alt="cofdbt logo" 
               className="w-6 h-6 rounded-md object-contain border border-zinc-300" 
             />
