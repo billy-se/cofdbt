@@ -15,10 +15,19 @@ const allowedOrigins: string[] = [
   'https://cofdbt.netlify.app',
   'https://merry-unicorn-dcd171.netlify.app',
   'http://localhost:5173'
-].filter((url): url is string => Boolean(url));
+].filter((url): url is string => Boolean(url))
+  .map(url => url.replace(/\/$/, ''));
 
 app.use(cors({
-  origin: allowedOrigins,
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    const cleanOrigin = origin.replace(/\/$/, '');
+    if (allowedOrigins.includes(cleanOrigin)) {
+      callback(null, true); 
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
 
