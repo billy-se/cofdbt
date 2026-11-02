@@ -10,18 +10,18 @@ dotenv.config();
 const app = express();
 const PORT = Number(process.env.PORT) || 4000;
 
-const allowedOrigins: string[] = [
-  process.env.CLIENT_URL,
-  'https://cofdbt.netlify.app',
-  'https://merry-unicorn-dcd171.netlify.app',
-  'http://localhost:5173'
-].filter((url): url is string => Boolean(url))
-  .map(url => url.replace(/\/$/, ''));
-
-app.use(cors({
-  origin: function (origin, callback) {
+const corsOptions = {
+  origin: function (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) {
     if (!origin) return callback(null, true);
     const cleanOrigin = origin.replace(/\/$/, '');
+    const allowedOrigins = [
+      process.env.CLIENT_URL,
+      'https://cofdbt.netlify.app',
+      'https://merry-unicorn-dcd171.netlify.app',
+      'http://localhost:5173'
+    ].filter((url): url is string => Boolean(url))
+      .map(url => url.replace(/\/$/, ''));
+
     if (allowedOrigins.includes(cleanOrigin)) {
       callback(null, true); 
     } else {
@@ -29,10 +29,12 @@ app.use(cors({
     }
   },
   credentials: true
-}));
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 app.use(express.json());
-
 app.use('/api/auth', authRouter);
 
 app.get('/health', (req, res) => {
